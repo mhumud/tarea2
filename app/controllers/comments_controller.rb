@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
   before_action :set_entry
-  before_action :set_comment, only: [:show, :update, :destroy]
+  before_action :set_comment, only: [:show, :put, :patch, :destroy]
 
   # GET /comments
   def index
@@ -26,12 +26,25 @@ class CommentsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /comments/1
-  def update
+  # PATCH /comments/1
+  def patch
     if @comment.update(comment_params)
       render json: @comment.as_json(except: [:updated_at, :entry_id])
     else
       render json: @comment.errors, status: :unprocessable_entity
+    end
+  end
+
+  # PUT /comments/1
+  def put
+    if (params[:author].nil? || !(params[:comment].is_a? String))
+      render json: {error: "Missing parameters" }, status: :bad_request
+    else
+      if @comment.update(comment_params)
+        render json: @comment.as_json(except: [:updated_at, :entry_id])
+      else
+        render json: @comment.errors, status: :unprocessable_entity
+      end
     end
   end
 

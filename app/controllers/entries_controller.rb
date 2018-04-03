@@ -1,5 +1,5 @@
 class EntriesController < ApplicationController
-  before_action :set_entry, only: [:show, :update, :destroy]
+  before_action :set_entry, only: [:show, :put, :patch, :destroy]
 
   # GET /entries
   def index
@@ -25,12 +25,25 @@ class EntriesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /entries/1
-  def update
+  # PATCH /entries/1
+  def patch
     if @entry.update(entry_params)
       render json: @entry.as_json(except: [:updated_at])
     else
       render json: @entry.errors, status: :unprocessable_entity
+    end
+  end
+
+  # PUT /entries/1
+  def put
+    if (params[:body].nil? || params[:title].nil?)
+      render json: {error: "Missing parameters" }, status: :bad_request
+    else    
+      if @entry.update(entry_params)
+        render json: @entry.as_json(except: [:updated_at])
+      else
+        render json: @entry.errors, status: :unprocessable_entity
+      end
     end
   end
 
