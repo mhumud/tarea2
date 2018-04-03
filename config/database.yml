@@ -21,8 +21,5 @@ test:
   database: db/test.sqlite3
 
 production:
-  adapter: postgresql
-  encoding: unicode
-  database: tarea2_production
-  username: tarea2
-  password: tarea-2
+  <<: *default
+  database: db/production.sqlite3
