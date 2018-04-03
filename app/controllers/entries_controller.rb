@@ -6,12 +6,12 @@ class EntriesController < ApplicationController
     @entries = Entry.all
     @entries.map{ |entry| entry["body"] = entry["body"].truncate(500) }
 
-    render json: @entries
+    render json: @entries.as_json(except: [:updated_at])
   end
 
   # GET /entries/1
   def show
-    render json: @entry
+    render json: @entry.as_json(except: [:updated_at])
   end
 
   # POST /entries
@@ -19,7 +19,7 @@ class EntriesController < ApplicationController
     @entry = Entry.new(entry_params)
 
     if @entry.save
-      render json: @entry, status: :created, location: @entry
+      render json: @entry.as_json(except: [:updated_at]), status: :created, location: @entry
     else
       render json: @entry.errors, status: :unprocessable_entity
     end
@@ -28,7 +28,7 @@ class EntriesController < ApplicationController
   # PATCH/PUT /entries/1
   def update
     if @entry.update(entry_params)
-      render json: @entry
+      render json: @entry.as_json(except: [:updated_at])
     else
       render json: @entry.errors, status: :unprocessable_entity
     end
@@ -38,7 +38,7 @@ class EntriesController < ApplicationController
   def destroy
     @entry.destroy
 
-    render json: @entry
+    render json: @entry.as_json(except: [:updated_at])
   end
 
   private
