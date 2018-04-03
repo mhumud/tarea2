@@ -3,8 +3,7 @@ class EntriesController < ApplicationController
 
   # GET /entries
   def index
-    @entries = Entry.all
-    @entries.map{ |entry| entry["body"] = entry["body"].truncate(500) }
+    @entries = Entry.all.map{ |entry| entry["body"] = entry["body"].truncate(500) }
 
     render json: @entries.as_json(except: [:updated_at])
   end
